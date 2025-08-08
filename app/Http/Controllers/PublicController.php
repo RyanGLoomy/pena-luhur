@@ -12,7 +12,7 @@ class PublicController extends Controller
      */
     public function home()
     {
-        // Ambil 8 buku terbaru untuk ditampilkan di halaman utama
+        // PERBAIKAN: Ambil 8 buku terbaru dari database dan kirim ke view.
         $latestBooks = Book::latest()->take(8)->get();
         return view('public.home', compact('latestBooks'));
     }
@@ -22,26 +22,20 @@ class PublicController extends Controller
      */
     public function koleksi(Request $request)
     {
-        // Ambil kata kunci pencarian dari URL
         $search = $request->input('search');
-
-        // Query data buku
         $books = Book::query()
             ->when($search, function ($query, $search) {
-                // Cari berdasarkan judul atau pengarang
                 return $query->where('judul', 'like', "%{$search}%")
                              ->orWhere('pengarang', 'like', "%{$search}%");
             })
-            ->where('status_ketersediaan', 'Tersedia') // Hanya tampilkan buku yang tersedia
+            ->where('status_ketersediaan', 'Tersedia')
             ->latest()
-            ->paginate(12); // Tampilkan 12 buku per halaman
-
-        // Kirim data buku dan kata kunci pencarian ke view
+            ->paginate(12);
         return view('public.koleksi', compact('books', 'search'));
     }
 
     /**
-     * PERBAIKAN: Menambahkan fungsi untuk Halaman Galeri.
+     * Menampilkan Halaman Galeri.
      */
     public function gallery()
     {
@@ -49,7 +43,7 @@ class PublicController extends Controller
     }
 
     /**
-     * PERBAIKAN: Menambahkan fungsi untuk Halaman Lokasi.
+     * Menampilkan Halaman Lokasi.
      */
     public function location()
     {

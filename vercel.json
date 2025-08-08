@@ -1,38 +1,31 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "public/assets/**/*",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "api/index.php",
-            "use": "@vercel/php"
+    "framework": null,
+    "functions": {
+        "api/index.php": {
+            "runtime": "vercel-php@0.6.0"
         }
-    ],
-    "routes": [
+    },
+    "rewrites": [
         {
-            "src": "/assets/(.*)",
-            "dest": "/public/assets/$1"
+            "source": "/(css|js|images|fonts)/(.*)",
+            "destination": "/public/$1/$2"
         },
         {
-            "src": "/(.*)",
-            "dest": "/api/index.php"
+            "source": "/(.*)",
+            "destination": "/api/index.php"
         }
     ],
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "false",
-        "APP_URL": "https://pena-luhur.vercel.app",
+        "APP_URL": "https://your-project-name.vercel.app",
         "APP_KEY": "@app_key",
         "DB_CONNECTION": "pgsql",
         "DB_HOST": "@db_host",
-        "DB_PORT": "5432",
+        "DB_PORT": "@db_port",
         "DB_DATABASE": "@db_database",
         "DB_USERNAME": "@db_username",
-        "DB_PASSWORD": "@db_password",
-        "SESSION_DRIVER": "cookie",
-        "CACHE_DRIVER": "array",
-        "LOG_CHANNEL": "stderr"
+        "DB_PASSWORD": "@db_password"
     }
 }
