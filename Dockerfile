@@ -19,7 +19,7 @@ COPY . .
 RUN npm run build
 
 # Stage 3: Final production image with Nginx and PHP-FPM
-FROM richarvey/nginx-php-fpm:2.2.3
+FROM richarvey/nginx-php-fpm:2.2.2
 
 # Copy application code and compiled assets
 COPY --from=frontend /app /var/www/html
