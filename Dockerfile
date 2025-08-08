@@ -1,11 +1,11 @@
 # Stage 1: Install PHP dependencies with Composer
-# This stage remains the same
+# This stage is now corrected
 FROM composer:2 AS vendor
 
 WORKDIR /app
-COPY database/ database/
-COPY composer.json composer.json
-COPY composer.lock composer.lock
+# COPY THE ENTIRE APPLICATION FIRST
+COPY . .
+# NOW RUN COMPOSER INSTALL. It can now find the 'artisan' file.
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 # Stage 2: Build frontend assets with Node.js
@@ -21,7 +21,7 @@ COPY . .
 RUN npm run build
 
 # Stage 3: Final production image with a STABLE Nginx and PHP-FPM
-# We are replacing the old, unreliable image with a popular and well-maintained one.
+# This stage remains the same
 FROM webdevops/php-nginx:8.2
 
 # Set working directory
@@ -29,5 +29,3 @@ WORKDIR /app
 
 # Copy application code and compiled assets from previous stage
 COPY --from=frontend /app .
-
-# This image automatically handles permissions and startup, so it's simpler.
