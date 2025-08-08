@@ -2,13 +2,13 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.php",
-      "use": "vercel-php@0.6.0"
-    },
-    {
       "src": "package.json",
       "use": "@vercel/node",
       "config": { "includeFiles": ["dist/**"] }
+    },
+    {
+      "src": "api/index.php",
+      "use": "vercel-php@0.6.0"
     }
   ],
   "rewrites": [
