@@ -2,11 +2,20 @@
   "version": 2,
   "builds": [
     {
+      "src": "package.json",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["dist/**"] }
+    },
+    {
       "src": "api/index.php",
       "use": "vercel-php@0.6.0"
     }
   ],
   "rewrites": [
+    {
+      "source": "/build/(.*)",
+      "destination": "/dist/$1"
+    },
     {
       "source": "/(.*)",
       "destination": "/api/index.php"
