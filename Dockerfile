@@ -1,11 +1,9 @@
 # Stage 1: Install PHP dependencies with Composer
-# This stage is now corrected
+# This stage remains the same
 FROM composer:2 AS vendor
 
 WORKDIR /app
-# COPY THE ENTIRE APPLICATION FIRST
 COPY . .
-# NOW RUN COMPOSER INSTALL. It can now find the 'artisan' file.
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 # Stage 2: Build frontend assets with Node.js
@@ -21,11 +19,20 @@ COPY . .
 RUN npm run build
 
 # Stage 3: Final production image with a STABLE Nginx and PHP-FPM
-# This stage remains the same
+# This stage is now corrected with an explicit permission fix
 FROM webdevops/php-nginx:8.2
+
+# The user for this image is 'application'. We set it as a variable.
+ENV WEB_USER=application
 
 # Set working directory
 WORKDIR /app
 
 # Copy application code and compiled assets from previous stage
 COPY --from=frontend /app .
+
+# --- FIX TERAKHIR: TAMBAHKAN BAGIAN INI ---
+# Setel kepemilikan dan izin akses file yang benar untuk Laravel
+RUN chown -R ${WEB_USER}:${WEB_USER} /app/storage /app/bootstrap/cache && \
+    chmod -R 775 /app/storage /app/bootstrap/cache
+# --- AKHIR DARI BAGIAN FIX ---
